@@ -1,0 +1,11 @@
+<resources>
+
+    <!-- Base application ui. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your ui here. -->
+
+        <!-- API21 Android 透明状态栏 -->
+        <!--<item name="android:statusBarColor">@android:color/transparent</item>-->
+    </style>
+
+</resources>
