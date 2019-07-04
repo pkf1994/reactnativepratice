@@ -1,14 +1,16 @@
 import React,{Component,Fragment} from 'react'
-import {StatusBar, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {createMaterialTopTabNavigator,createAppContainer} from "react-navigation"
 import {PopularTabView} from './component'
+import {NavigationBar} from '../../component'
+import {connect} from 'react-redux'
 type Props = {}
-export default class PopularPage extends Component<Props> {
+
+class PopularPage extends Component<Props> {
     constructor(props) {
         super(props)
         this.tabNames = ['java','c','go','javascript','python']
     }
-
 
     initTopTab() {
         var tabObj = {}
@@ -30,7 +32,7 @@ export default class PopularPage extends Component<Props> {
                     upperCaseLabel: false,
                     scrollEnabled: true,
                     style: {
-                        backgroundColor: "#678"
+                        backgroundColor: this.props.theme
                     },
                     indicatorStyle: styles.indicatorStyle,
                     labelStyle: styles.labelStyle
@@ -43,13 +45,21 @@ export default class PopularPage extends Component<Props> {
         const TopTab = this.initTopTab()
         return (
             <Fragment>
-                <StatusBar
-                    hidden={false} backgroundColor={'transparent'} translucent barStyle={'light-content'}/>
+                <NavigationBar title='最热' style={{backgroundColor: this.props.theme}}/>
                 <TopTab/>
             </Fragment>
         );
     }
 }
+
+const mapState = (state) => ({
+    theme: state.ui.theme,
+})
+
+const mapDispatch = (dispatch) => ({
+})
+
+export default connect(mapState,mapDispatch)(PopularPage)
 
 const styles = StyleSheet.create({
     container: {
@@ -63,7 +73,6 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     tabStyle: {
-        width: 120
     },
     indicatorStyle: {
         height: 2,

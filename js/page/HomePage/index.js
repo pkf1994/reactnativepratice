@@ -1,6 +1,8 @@
 import React,{Component} from 'react'
-import {StyleSheet, Text, View} from 'react-native';
+import {BackHandler} from 'react-native'
+import {connect} from 'react-redux'
 import {createBottomTabNavigator,createAppContainer} from 'react-navigation'
+import {BottomTabBar} from 'react-navigation-tabs'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -10,10 +12,24 @@ import FavoritePage from "../FavoritePage";
 import MyPage from "../MyPage";
 import NavigationUtil from "../../navigation/NavigationUtil";
 type Props = {}
-export default class HomePage extends Component<Props> {
+
+class HomePage extends Component<Props> {
+
+    constructor(props) {
+        super(props);
+        BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
+    }
+
+    componentWillUnmount(): void {
+        BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
+    }
+
 
     initBottomTab() {
-        return createAppContainer(createBottomTabNavigator({
+        if(this.bottomTabNavigator){
+            return this.bottomTabNavigator
+        }
+        return this.bottomTabNavigator = createAppContainer(createBottomTabNavigator({
             PopularPage: {
                 screen: PopularPage,
                 navigationOptions: {
@@ -59,10 +75,22 @@ export default class HomePage extends Component<Props> {
                             name='user'
                             size={26}
                             style={{color: tintColor}}/>
-                    )
+                     )
                 }
             }
-        }))
+        },
+        {
+            tabBarComponent: props => (
+                <TabBarComponent {...props} theme={this.props.theme}/>
+            )
+        }
+
+        ))
+    }
+
+    onBackButtonPressAndroid = () => {
+        console.log('click back')
+        return false
     }
 
     render() {
@@ -74,15 +102,22 @@ export default class HomePage extends Component<Props> {
     }
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#B3F7DB'
-    },
-    welcome: {
-        fontSize: 20,
-        textAlign: 'center'
+class TabBarComponent extends Component{
+    constructor(props) {
+        super(props)
     }
+    render(){
+        return <BottomTabBar {...this.props} activeTintColor={this.props.theme}/>
+    }
+}
+
+const mapState = (state) => ({
+    theme: state.ui.theme
 })
+
+const mapDispatch = (dispatch) => ({
+
+})
+
+export default connect(mapState,mapDispatch)(HomePage)
+

@@ -1,7 +1,7 @@
-import {CHANGE_THEME} from "./actionType";
+import {CHANGE_THEME_ACTION} from "./actionType";
 
 export const createAction_changeTheme = (payload) => ({
-    type: CHANGE_THEME,
+    type: CHANGE_THEME_ACTION,
     value: payload
 })
 

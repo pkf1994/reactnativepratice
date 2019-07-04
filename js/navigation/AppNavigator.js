@@ -7,12 +7,13 @@ import {
 } from 'react-navigation';
 import React, {Component} from 'react'
 import {Provider,connect} from 'react-redux'
-import {createReactNavigationReduxMiddleware,reduxifyNavigator} from 'react-navigation-redux-helpers'
 import WelcomePage from "../page/WelcomePage";
 import HomePage from "../page/HomePage";
 import DetailPage from "../page/DetailPage";
-import store from '../redux'
+import WebPage from '../page/WebPage'
+import {store,persistor} from '../redux'
 import {Platform,StatusBar} from "react-native";
+import { PersistGate } from 'redux-persist/es/integration/react'
 
 const commonHeaderStyle = Platform.OS === 'android' ? {
     paddingTop: StatusBar.currentHeight,
@@ -38,7 +39,13 @@ const MainNavigator = createStackNavigator({
     DetailPage: {
         screen: DetailPage,
         navigationOptions: {
-            headerStyle: commonHeaderStyle
+            header: null
+        }
+    },
+    WebPage: {
+        screen: WebPage,
+        navigationOptions: {
+            header: null
         }
     }
 });
@@ -59,7 +66,12 @@ export default class ReduxNavigationApp extends React.Component{
     render(){
         return (
             <Provider store={store}>
-                <NavigationApp/>
+                <PersistGate
+                    loading={null}
+                    persistor={persistor}
+                >
+                    <NavigationApp/>
+                </PersistGate>
             </Provider>
         )
     }

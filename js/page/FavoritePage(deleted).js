@@ -1,17 +1,11 @@
 import React,{Component} from 'react'
 import {StyleSheet, Text, View} from 'react-native';
-import NavigationUtil from "../../../navigation/NavigationUtil";
-
-export default class PopularTabView extends Component {
-
+type Props = {}
+export default class FavoritePageDeleted extends Component<Props> {
     render() {
-        const {tabLabel} = this.props
         return (
             <View style={styles.container}>
-                <Text>{tabLabel}</Text>
-                <Text onPress={() => {
-                    NavigationUtil.goPage(null,"DetailPage")
-                }}>go to detailPage</Text>
+                <Text style={styles.welcome}>FavoritePage</Text>
             </View>
         );
     }
