@@ -1,15 +1,23 @@
 import React,{Component} from 'react'
-import {StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import {StyleSheet, Text, View, TouchableOpacity, ScrollView,Linking} from 'react-native';
 import {connect} from "react-redux";
 import Feather from 'react-native-vector-icons/Feather'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import {NavigationBar,LeftBackButton,SettingItem} from '../../component'
+import {CustomThemeDialog} from './component'
 import {createAction_changeTheme} from "../../redux/module/ui/action";
 import {MENU_META} from "./menu";
 import GlobalStyles from "../../util/GlobalStyles";
 import NavigationUtil from "../../navigation/NavigationUtil";
 type Props = {}
 class MyPage extends Component<Props> {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            showCustomThemeModal: false
+        }
+    }
 
     getRightButton() {
         return (
@@ -19,15 +27,8 @@ class MyPage extends Component<Props> {
         )
     }
 
-    getLeftButton() {
-        return (
-            <TouchableOpacity onPress={()=>{}} style={styles.leftButton}>
-                <Ionicons name="ios-arrow-back" size={24} style={{color:'white'}}/>
-            </TouchableOpacity>
-        )
-    }
 
-    onClick(menu) {
+    onClick = (menu) => {
         let RouteName, params = {}
         switch (menu) {
             case MENU_META.Tutorial:
@@ -37,10 +38,48 @@ class MyPage extends Component<Props> {
                     url: 'https://github.com/'
                 }
                 break
+            case MENU_META.About:
+                RouteName = 'AboutPage'
+                break
+            case MENU_META.About_Author:
+                RouteName = 'AboutMePage'
+                break
+            case MENU_META.Custom_key:
+                RouteName = 'CustomKeyPage'
+                params = {
+                    flag: 'popular'
+                }
+                break
+            case MENU_META.Sort_Key:
+                RouteName = 'SortKeyPage'
+                params = {
+                    flag: 'popular'
+                }
+                break
+            case MENU_META.Sort_Language:
+                RouteName = 'SortKeyPage'
+                params = {
+                    flag: 'trending'
+                }
+                break
+            case MENU_META.Custom_Language:
+                RouteName = 'CustomKeyPage'
+                params = {
+                    flag: 'trending'
+                }
+                break
+            case MENU_META.Custom_Theme:
+                this.customThemeDialog.show()
+                break
         }
         if(RouteName) {
             NavigationUtil.goPage(params,RouteName)
         }
+    }
+
+    onBack() {
+        const {navigation} = this.props
+        NavigationUtil.goBack(navigation)
     }
 
     getItem(menu) {
@@ -56,7 +95,7 @@ class MyPage extends Component<Props> {
             <View style={GlobalStyles.root_container}>
                 <NavigationBar title="我的"
                                style={{backgroundColor: theme}}
-                               leftButton={<LeftBackButton callback={()=>{}}/>}
+                               leftButton={<LeftBackButton callback={()=>this.onBack()}/>}
                                rightButton={this.getRightButton()}/>
                 <ScrollView>
                     <TouchableOpacity onPress={() => this.onClick(MENU_META.About)} style={styles.item}>
@@ -85,8 +124,6 @@ class MyPage extends Component<Props> {
                     {this.getItem(MENU_META.Custom_key)}
                     {/*标签排序*/}
                     {this.getItem(MENU_META.Sort_Key)}
-                    {/*标签移除*/}
-                    {this.getItem(MENU_META.Remove_Key)}
 
                     <Text style={styles.groupTitle}>设置</Text>
                     {/*自定义主题*/}
@@ -96,6 +133,8 @@ class MyPage extends Component<Props> {
                     {/*反馈*/}
                     {this.getItem(MENU_META.Feedback)}
                 </ScrollView>
+
+                <CustomThemeDialog ref={customThemeDialog => this.customThemeDialog = customThemeDialog}/>
             </View>
         );
     }
@@ -141,8 +180,8 @@ const styles = StyleSheet.create({
     },
     groupTitle: {
         marginLeft: 10,
-        marginTop: 10,
-        marginBottom: 5,
+        marginTop: 7,
+        marginBottom: 7,
         fontSize: 12,
         color: 'gray'
     }

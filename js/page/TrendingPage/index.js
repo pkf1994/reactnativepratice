@@ -15,44 +15,43 @@ const SINCE_MONTH = '本月'
 class TrendingPage extends Component<Props> {
     constructor(props) {
         super(props)
-        this.tabNames = ['java','c','go','javascript','python']
         this.sinceModalData = [SINCE_DAILY,SINCE_WEEKLY,SINCE_MONTH]
         this.state = {
-            since: SINCE_DAILY
+            since: SINCE_DAILY,
         }
     }
 
     initTopTab() {
-        if(!this.topTab) {
-            var tabObj = {}
+        const {tabList} = this.props
+        var tabObj = {}
 
-            this.tabNames.forEach((item,index) => {
+        tabList.forEach((item,index) => {
+            if(item.checked) {
                 tabObj[`TrendingTab${index}`] = {
-                    screen: props => <TrendingTabView {...props} tabLabel={item}/>,
+                    screen: props => <TrendingTabView {...props} tabLabel={item.path}/>,
                     navigationOptions: {
-                        title: item
+                        title: item.name
                     }
                 }
-            })
+            }
+        })
 
-            return this.topTab = createAppContainer(createMaterialTopTabNavigator(
-                tabObj,
-                {
-                    tabBarOptions: {
-                        tabStyle: styles.tabStyle,
-                        upperCaseLabel: false,
-                        scrollEnabled: true,
-                        style: {
-                            backgroundColor: this.props.theme
-                        },
-                        indicatorStyle: styles.indicatorStyle,
-                        labelStyle: styles.labelStyle
-                    }
-                }
-            ))
-        }
-        return this.topTab
-
+        return createAppContainer(createMaterialTopTabNavigator(
+            tabObj,
+            {
+                tabBarOptions: {
+                    tabStyle: styles.tabStyle,
+                    upperCaseLabel: false,
+                    scrollEnabled: true,
+                    style: {
+                        backgroundColor: this.props.theme
+                    },
+                    indicatorStyle: styles.indicatorStyle,
+                    labelStyle: styles.labelStyle
+                },
+                lazy: true
+            }
+        ))
     }
 
     onSelectSinceModal(item) {
@@ -104,6 +103,7 @@ class TrendingPage extends Component<Props> {
 
 const mapState = (state) => ({
     theme: state.ui.theme,
+    tabList: state.customKey.trending
 })
 
 const mapDispatch = (dispatch) => ({

@@ -1,5 +1,5 @@
 import React,{Component} from 'react'
-import {StyleSheet, Modal, TouchableOpacity, View, Text, ViewPropTypes} from 'react-native';
+import {StyleSheet, Modal, TouchableOpacity, View, Text, ViewPropTypes,StatusBar} from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import PropTypes from "prop-types";
 type Props = {}
@@ -28,7 +28,7 @@ export default class ListModal extends Component<Props> {
         const {visible} = this.state
         const {onClose, onSelect, data} = this.props
         return (
-            <Modal transparent={true} visible={visible} onRequestClose={onClose}>
+            <Modal transparent={true} visible={visible} onRequestClose={onClose} animationType={'fade'}>
                 <TouchableOpacity onPress={() => this.dismiss()}
                                   style={styles.cover}>
                     <MaterialIcons name={'arrow-drop-up'} size={36} style={styles.arrow}/>
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     arrow: {
-        marginTop: 35,
+        marginTop: 35 + StatusBar.currentHeight,
         color: 'white',
         padding: 0,
         margin: -15,

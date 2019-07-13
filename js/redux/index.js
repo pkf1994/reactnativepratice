@@ -9,7 +9,8 @@ import reducer from './reducer'
 
 const persistConfig = {
     key: 'root',
-    storage: AsyncStorage
+    storage: AsyncStorage,
+    blacklist: ['search']
     //stateReconciler: autoMergeLevel2
 }
 

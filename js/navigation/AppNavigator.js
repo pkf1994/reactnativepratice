@@ -11,9 +11,14 @@ import WelcomePage from "../page/WelcomePage";
 import HomePage from "../page/HomePage";
 import DetailPage from "../page/DetailPage";
 import WebPage from '../page/WebPage'
+import AboutPage from '../page/AboutPage/AboutPage'
 import {store,persistor} from '../redux'
 import {Platform,StatusBar} from "react-native";
 import { PersistGate } from 'redux-persist/es/integration/react'
+import AboutMePage from "../page/AboutPage/AboutMePage";
+import CustomKeyPage from "../page/CustomKeyPage";
+import SortKeyPage from "../page/SortKeyPage";
+import SearchPage from "../page/SearchPage";
 
 const commonHeaderStyle = Platform.OS === 'android' ? {
     paddingTop: StatusBar.currentHeight,
@@ -47,7 +52,37 @@ const MainNavigator = createStackNavigator({
         navigationOptions: {
             header: null
         }
-    }
+    },
+    AboutPage: {
+        screen: AboutPage,
+        navigationOptions: {
+            header: null
+        }
+    },
+    AboutMePage: {
+        screen: AboutMePage,
+        navigationOptions: {
+            header: null
+        }
+    },
+    CustomKeyPage: {
+        screen: CustomKeyPage,
+        navigationOptions: {
+            header: null
+        }
+    },
+    SortKeyPage: {
+        screen: SortKeyPage,
+        navigationOptions: {
+            header: null
+        }
+    },
+    SearchPage: {
+        screen: SearchPage,
+        navigationOptions: {
+            header: null
+        }
+    },
 });
 
 let NavigationApp =  createAppContainer(createSwitchNavigator(

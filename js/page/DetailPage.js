@@ -7,6 +7,7 @@ import NavigationUtil from "../navigation/NavigationUtil";
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 import {createAction_updateFavoriteList} from "../redux/module/favorite/action";
 type Props = {}
+
 class DetailPage extends Component<Props> {
 
     constructor(props) {

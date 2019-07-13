@@ -8,7 +8,7 @@ export default (state = defaultState, action) => {
     if(action.type === CHANGE_THEME_ACTION) {
         return {
             ...state,
-            theme:action.value
+            theme:action.payload.theme
         }
     }
     return state

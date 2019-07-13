@@ -1,25 +1,28 @@
 import React,{Component,Fragment} from 'react'
-import {FlatList, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {createMaterialTopTabNavigator,createAppContainer} from "react-navigation"
 import {PopularTabView} from './component'
 import {NavigationBar} from '../../component'
 import {connect} from 'react-redux'
+import Feather from "react-native-vector-icons/Feather";
+import NavigationUtil from "../../navigation/NavigationUtil";
 type Props = {}
 
 class PopularPage extends Component<Props> {
     constructor(props) {
         super(props)
-        this.tabNames = ['java','c','go','javascript','python']
     }
 
     initTopTab() {
+        const {tabList} = this.props
         var tabObj = {}
-
-        this.tabNames.forEach((item,index) => {
-            tabObj[`PopularTab${index}`] = {
-                screen: props => <PopularTabView {...props} tabLabel={item}/>,
-                navigationOptions: {
-                    title: item
+        tabList.forEach((item,index) => {
+            if(item.checked) {
+                tabObj[`PopularTab${index}`] = {
+                    screen: props => <PopularTabView {...props} tabLabel={item.path}/>,
+                    navigationOptions: {
+                        title: item.name
+                    }
                 }
             }
         })
@@ -36,16 +39,27 @@ class PopularPage extends Component<Props> {
                     },
                     indicatorStyle: styles.indicatorStyle,
                     labelStyle: styles.labelStyle
-                }
+                },
+                lazy: true
             }
         ))
+    }
+
+    getRightButton() {
+        return (
+            <TouchableOpacity onPress={()=>{NavigationUtil.goPage(null,'SearchPage')}} style={styles.rightButton}>
+                <Feather name="search" size={24} style={{color:'white'}}/>
+            </TouchableOpacity>
+        )
     }
 
     render() {
         const TopTab = this.initTopTab()
         return (
             <Fragment>
-                <NavigationBar title='最热' style={{backgroundColor: this.props.theme}}/>
+                <NavigationBar title='最热'
+                               rightButton={this.getRightButton()}
+                               style={{backgroundColor: this.props.theme}}/>
                 <TopTab/>
             </Fragment>
         );
@@ -54,6 +68,7 @@ class PopularPage extends Component<Props> {
 
 const mapState = (state) => ({
     theme: state.ui.theme,
+    tabList: state.customKey.popular
 })
 
 const mapDispatch = (dispatch) => ({
@@ -67,6 +82,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#B3F7DB'
+    },
+    rightButton: {
+        padding: 5,
+        marginRight: 8
     },
     welcome: {
         fontSize: 20,
