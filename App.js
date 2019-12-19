@@ -16,6 +16,8 @@ const instructions = Platform.select({
     'Shake or press menu button for dev menu',
 });
 
+console.log("test pull requset reactnativepratice")
+
 type Props = {};
 export default class App extends Component<Props> {
   render() {
